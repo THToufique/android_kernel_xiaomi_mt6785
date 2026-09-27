@@ -1945,6 +1945,8 @@ struct ion_handle *ion_import_dma_buf_fd(struct ion_client *client, int fd)
 
 	handle = ion_import_dma_buf(client, dmabuf);
 	dma_buf_put(dmabuf);
+	if (IS_ERR(handle))
+		return handle;
 
 	mmprofile_log_ex(ion_mmp_events[PROFILE_IMPORT], MMPROFILE_FLAG_END,
 			 (unsigned long)client,
