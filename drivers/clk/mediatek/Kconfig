@@ -210,6 +210,25 @@ config COMMON_CLK_MT6765_MIPI2BSYS
        help
          This driver supports MediaTek MT6765 mipi2bsys clocks.
 
+config COMMON_CLK_MT6785
+	tristate "Clock driver for MediaTek MT6785"
+	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
+	select COMMON_CLK_MEDIATEK
+	default ARCH_MEDIATEK && ARM64
+	help
+	  This driver supports MediaTek MT6785 basic clocks.
+
+	  Part 1: only the gate-only domains that do not depend on the
+	  PLL/DVFSP side. Currently that is the audio domain
+	  ("mediatek,audio"). mediatek,apmixed is not provided yet, so the
+	  topckgen muxes have no parent clock and the SoC will not run.
+
+	  The 4.14 bringup-only *_DUMMY gate ops are not ported; those
+	  exist to keep clocks up during early bringup. This driver uses
+	  the real gates, which is the production behaviour.
+
+	  Say Y if you have an MT6785 board and want to build this driver.
+
 config COMMON_CLK_MT6779
 	tristate "Clock driver for MediaTek MT6779"
 	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
