@@ -1142,6 +1142,310 @@ static const struct mtk_composite top_audmuxes[] __initconst = {
 	DIV_GATE(TOP_APLL12_DIV5, "apll12_div5", "i2s5_m_ck_sel",
 		0x328, 16, 0x328, 4, 28),
 };
+#define GATE_INFRA0(_id, _name, _parent, _shift) {	\
+		.id = _id,				\
+		.name = _name,				\
+		.parent_name = _parent,			\
+		.regs = &infra0_cg_regs,		\
+		.shift = _shift,			\
+		.ops = &mtk_clk_gate_ops_setclr,	\
+	}
+static const struct mtk_gate_regs infra0_cg_regs = {
+	.set_ofs = 0x80,
+	.clr_ofs = 0x84,
+	.sta_ofs = 0x90,
+};
+#define GATE_INFRA1(_id, _name, _parent, _shift) {	\
+		.id = _id,				\
+		.name = _name,				\
+		.parent_name = _parent,			\
+		.regs = &infra1_cg_regs,		\
+		.shift = _shift,			\
+		.ops = &mtk_clk_gate_ops_setclr,	\
+	}
+static const struct mtk_gate_regs infra1_cg_regs = {
+	.set_ofs = 0x88,
+	.clr_ofs = 0x8c,
+	.sta_ofs = 0x94,
+};
+#define GATE_INFRA2(_id, _name, _parent, _shift) {	\
+		.id = _id,				\
+		.name = _name,				\
+		.parent_name = _parent,			\
+		.regs = &infra2_cg_regs,		\
+		.shift = _shift,			\
+		.ops = &mtk_clk_gate_ops_setclr,	\
+	}
+static const struct mtk_gate_regs infra2_cg_regs = {
+	.set_ofs = 0xa4,
+	.clr_ofs = 0xa8,
+	.sta_ofs = 0xac,
+};
+#define GATE_INFRA3(_id, _name, _parent, _shift) {	\
+		.id = _id,				\
+		.name = _name,				\
+		.parent_name = _parent,			\
+		.regs = &infra3_cg_regs,		\
+		.shift = _shift,			\
+		.ops = &mtk_clk_gate_ops_setclr,	\
+	}
+static const struct mtk_gate_regs infra3_cg_regs = {
+	.set_ofs = 0xc0,
+	.clr_ofs = 0xc4,
+	.sta_ofs = 0xc8,
+};
+static const struct mtk_gate infra_clks[] __initconst = {
+	/* INFRA0 */
+	GATE_INFRA0(INFRACFG_AO_PMIC_CG_TMR, "infra_pmic_tmr",
+		"axi_sel", 0),
+	GATE_INFRA0(INFRACFG_AO_PMIC_CG_AP, "infra_pmic_ap",
+		"axi_sel", 1),
+	GATE_INFRA0(INFRACFG_AO_PMIC_CG_MD, "infra_pmic_md",
+		"axi_sel", 2),
+	GATE_INFRA0(INFRACFG_AO_PMIC_CG_CONN, "infra_pmic_conn",
+		"axi_sel", 3),
+	GATE_INFRA0(INFRACFG_AO_SCPSYS_CG, "infra_scp",
+		"axi_sel", 4),
+	GATE_INFRA0(INFRACFG_AO_SEJ_CG, "infra_sej",
+		"f_f26m_ck", 5),
+	GATE_INFRA0(INFRACFG_AO_APXGPT_CG, "infra_apxgpt",
+		"axi_sel", 6),
+	GATE_INFRA0(INFRACFG_AO_ICUSB_CG, "infra_icusb",
+		"axi_sel", 8),
+	GATE_INFRA0(INFRACFG_AO_GCE_CG, "infra_gce",
+		"axi_sel", 9),
+	GATE_INFRA0(INFRACFG_AO_THERM_CG, "infra_therm",
+		"axi_sel", 10),
+	GATE_INFRA0(INFRACFG_AO_I2C0_CG, "infra_i2c0",
+		"i2c_sel", 11),
+	GATE_INFRA0(INFRACFG_AO_I2C1_CG, "infra_i2c1",
+		"i2c_sel", 12),
+	GATE_INFRA0(INFRACFG_AO_I2C2_CG, "infra_i2c2",
+		"i2c_sel", 13),
+	GATE_INFRA0(INFRACFG_AO_I2C3_CG, "infra_i2c3",
+		"i2c_sel", 14),
+	GATE_INFRA0(INFRACFG_AO_PWM_HCLK_CG, "infra_pwm_hclk",
+		"pwm_sel", 15),
+	GATE_INFRA0(INFRACFG_AO_PWM1_CG, "infra_pwm1",
+		"pwm_sel", 16),
+	GATE_INFRA0(INFRACFG_AO_PWM2_CG, "infra_pwm2",
+		"pwm_sel", 17),
+	GATE_INFRA0(INFRACFG_AO_PWM3_CG, "infra_pwm3",
+		"pwm_sel", 18),
+	GATE_INFRA0(INFRACFG_AO_PWM4_CG, "infra_pwm4",
+		"pwm_sel", 19),
+	GATE_INFRA0(INFRACFG_AO_PWM_CG, "infra_pwm",
+		"pwm_sel", 21),
+	GATE_INFRA0(INFRACFG_AO_UART0_CG, "infra_uart0",
+		"uart_sel", 22),
+	GATE_INFRA0(INFRACFG_AO_UART1_CG, "infra_uart1",
+		"uart_sel", 23),
+	GATE_INFRA0(INFRACFG_AO_UART2_CG, "infra_uart2",
+		"uart_sel", 24),
+	GATE_INFRA0(INFRACFG_AO_UART3_CG, "infra_uart3",
+		"uart_sel", 25),
+	GATE_INFRA0(INFRACFG_AO_GCE_26M_CG, "infra_gce_26m",
+		"axi_sel", 27),
+	GATE_INFRA0(INFRACFG_AO_CQ_DMA_FPC_CG, "infra_cqdma_fpc",
+		"axi_sel", 28),
+	GATE_INFRA0(INFRACFG_AO_BTIF_CG, "infra_btif",
+		"axi_sel", 31),
+	/* INFRA1 */
+	GATE_INFRA1(INFRACFG_AO_SPI0_CG, "infra_spi0",
+		"spi_sel", 1),
+	GATE_INFRA1(INFRACFG_AO_MSDC0_CG, "infra_msdc0",
+		"msdc50_hclk_sel", 2),
+	GATE_INFRA1(INFRACFG_AO_MSDC1_CG, "infra_msdc1",
+		"axi_sel", 4),
+	GATE_INFRA1(INFRACFG_AO_MSDC2_CG, "infra_msdc2",
+		"axi_sel", 5),
+	GATE_INFRA1(INFRACFG_AO_MSDC0_SCK_CG, "infra_msdc0_sck",
+		"msdc50_0_sel", 6),
+	GATE_INFRA1(INFRACFG_AO_DVFSRC_CG, "infra_dvfsrc",
+		"f_f26m_ck", 7),
+	GATE_INFRA1(INFRACFG_AO_GCPU_CG, "infra_gcpu",
+		"axi_sel", 8),
+	GATE_INFRA1(INFRACFG_AO_TRNG_CG, "infra_trng",
+		"axi_sel", 9),
+	GATE_INFRA1(INFRACFG_AO_AUXADC_CG, "infra_auxadc",
+		"f_f26m_ck", 10),
+	GATE_INFRA1(INFRACFG_AO_CPUM_CG, "infra_cpum",
+		"axi_sel", 11),
+	GATE_INFRA1(INFRACFG_AO_CCIF1_AP_CG, "infra_ccif1_ap",
+		"axi_sel", 12),
+	GATE_INFRA1(INFRACFG_AO_CCIF1_MD_CG, "infra_ccif1_md",
+		"axi_sel", 13),
+	GATE_INFRA1(INFRACFG_AO_AUXADC_MD_CG, "infra_auxadc_md",
+		"f_f26m_ck", 14),
+	GATE_INFRA1(INFRACFG_AO_MSDC1_SCK_CG, "infra_msdc1_sck",
+		"msdc30_1_sel", 16),
+	GATE_INFRA1(INFRACFG_AO_MSDC2_SCK_CG, "infra_msdc2_sck",
+		"msdc30_2_sel", 17),
+	GATE_INFRA1(INFRACFG_AO_AP_DMA_CG, "infra_apdma",
+		"axi_sel", 18),
+	GATE_INFRA1(INFRACFG_AO_XIU_CG, "infra_xiu",
+		"axi_sel", 19),
+	GATE_INFRA1(INFRACFG_AO_DEVICE_APC_CG, "infra_device_apc",
+		"axi_sel", 20),
+	GATE_INFRA1(INFRACFG_AO_CCIF_AP_CG, "infra_ccif_ap",
+		"axi_sel", 23),
+	GATE_INFRA1(INFRACFG_AO_DEBUGSYS_CG, "infra_debugsys",
+		"axi_sel", 24),
+	GATE_INFRA1(INFRACFG_AO_AUDIO_CG, "infra_audio",
+		"axi_sel", 25),
+	GATE_INFRA1(INFRACFG_AO_CCIF_MD_CG, "infra_ccif_md",
+		"axi_sel", 26),
+	GATE_INFRA1(INFRACFG_AO_DXCC_SEC_CORE_CG, "infra_dxcc_sec_core",
+		"dxcc_sel", 27),
+	GATE_INFRA1(INFRACFG_AO_DXCC_AO_CG, "infra_dxcc_ao",
+		"dxcc_sel", 28),
+	GATE_INFRA1(INFRACFG_AO_DEVMPU_BCLK_CG, "infra_devmpu_bclk",
+		"axi_sel", 30),
+	GATE_INFRA1(INFRACFG_AO_DRAMC_F26M_CG, "infra_dramc_f26m",
+		"f_f26m_ck", 31),
+	/* INFRA2 */
+	GATE_INFRA2(INFRACFG_AO_IRTX_CG, "infra_irtx",
+		"f_f26m_ck", 0),
+	GATE_INFRA2(INFRACFG_AO_USB_CG, "infra_usb",
+		"usb_top_sel", 1),
+	GATE_INFRA2(INFRACFG_AO_DISP_PWM_CG, "infra_disppwm",
+		"axi_sel", 2),
+	GATE_INFRA2(INFRACFG_AO_AUDIO_26M_BCLK_CK,
+		"infracfg_ao_audio_26m_bclk_ck", "f_f26m_ck", 4),
+	GATE_INFRA2(INFRACFG_AO_SPI1_CG, "infra_spi1",
+		"spi_sel", 6),
+	GATE_INFRA2(INFRACFG_AO_I2C4_CG, "infra_i2c4",
+		"i2c_sel", 7),
+	GATE_INFRA2(INFRACFG_AO_MODEM_TEMP_SHARE_CG, "infra_md_tmp_share",
+		"f_f26m_ck", 8),
+	GATE_INFRA2(INFRACFG_AO_SPI2_CG, "infra_spi2",
+		"spi_sel", 9),
+	GATE_INFRA2(INFRACFG_AO_SPI3_CG, "infra_spi3",
+		"spi_sel", 10),
+	GATE_INFRA2(INFRACFG_AO_UNIPRO_SCK_CG, "infra_unipro_sck",
+		"fufs_sel", 11),
+	GATE_INFRA2(INFRACFG_AO_UNIPRO_TICK_CG, "infra_unipro_tick",
+		"fufs_sel", 12),
+	GATE_INFRA2(INFRACFG_AO_UFS_MP_SAP_BCLK_CG, "infra_ufs_mp_sap_bck",
+		"fufs_sel", 13),
+	GATE_INFRA2(INFRACFG_AO_MD32_BCLK_CG, "infra_md32_bclk",
+		"axi_sel", 14),
+	GATE_INFRA2(INFRACFG_AO_SSPM_CG, "infra_sspm",
+		"sspm_sel", 15),
+	GATE_INFRA2(INFRACFG_AO_UNIPRO_MBIST_CG, "infra_unipro_mbist",
+		"axi_sel", 16),
+	GATE_INFRA2(INFRACFG_AO_SSPM_BUS_HCLK_CG, "infra_sspm_bus_hclk",
+		"axi_sel", 17),
+	GATE_INFRA2(INFRACFG_AO_I2C5_CG, "infra_i2c5",
+		"i2c_sel", 18),
+	GATE_INFRA2(INFRACFG_AO_I2C5_ARBITER_CG, "infra_i2c5_arbiter",
+		"i2c_sel", 19),
+	GATE_INFRA2(INFRACFG_AO_I2C5_IMM_CG, "infra_i2c5_imm",
+		"i2c_sel", 20),
+	GATE_INFRA2(INFRACFG_AO_I2C1_ARBITER_CG, "infra_i2c1_arbiter",
+		"i2c_sel", 21),
+	GATE_INFRA2(INFRACFG_AO_I2C1_IMM_CG, "infra_i2c1_imm",
+		"i2c_sel", 22),
+	GATE_INFRA2(INFRACFG_AO_I2C2_ARBITER_CG, "infra_i2c2_arbiter",
+		"i2c_sel", 23),
+	GATE_INFRA2(INFRACFG_AO_I2C2_IMM_CG, "infra_i2c2_imm",
+		"i2c_sel", 24),
+	GATE_INFRA2(INFRACFG_AO_SPI4_CG, "infra_spi4",
+		"spi_sel", 25),
+	GATE_INFRA2(INFRACFG_AO_SPI5_CG, "infra_spi5",
+		"spi_sel", 26),
+	GATE_INFRA2(INFRACFG_AO_CQ_DMA_CG, "infra_cqdma",
+		"axi_sel", 27),
+	GATE_INFRA2(INFRACFG_AO_UFS_CG, "infra_ufs",
+		"fufs_sel", 28),
+	GATE_INFRA2(INFRACFG_AO_AES_UFSFDE_CG, "infra_aes_ufsfde",
+		"faes_ufsfde_sel", 29),
+	GATE_INFRA2(INFRACFG_AO_UFS_TICK_CG, "infra_ufs_tick",
+		"fufs_sel", 30),
+	GATE_INFRA2(INFRACFG_AO_SSUSB_XHCI_CG, "infra_ssusb_xhci",
+		"ssusb_top_xhci_sel", 31),
+	/* INFRA3 */
+	GATE_INFRA3(INFRACFG_AO_MSDC0_SELF_CG, "infra_msdc0_self",
+		"msdc50_0_sel", 0),
+	GATE_INFRA3(INFRACFG_AO_MSDC1_SELF_CG, "infra_msdc1_self",
+		"msdc50_0_sel", 1),
+	GATE_INFRA3(INFRACFG_AO_MSDC2_SELF_CG, "infra_msdc2_self",
+		"msdc50_0_sel", 2),
+	GATE_INFRA3(INFRACFG_AO_SSPM_26M_SELF_CG, "infra_sspm_26m_self",
+		"f_f26m_ck", 3),
+	GATE_INFRA3(INFRACFG_AO_SSPM_32K_SELF_CG, "infra_sspm_32k_self",
+		"f_f26m_ck", 4),
+	GATE_INFRA3(INFRACFG_AO_UFS_AXI_CG, "infra_ufs_axi",
+		"axi_sel", 5),
+	GATE_INFRA3(INFRACFG_AO_I2C6_CG, "infra_i2c6",
+		"i2c_sel", 6),
+	GATE_INFRA3(INFRACFG_AO_AP_MSDC0_CG, "infra_ap_msdc0",
+		"msdc50_hclk_sel", 7),
+	GATE_INFRA3(INFRACFG_AO_MD_MSDC0_CG, "infra_md_msdc0",
+		"msdc50_hclk_sel", 8),
+
+	GATE_INFRA3(INFRACFG_AO_FADSP_26M_CG, "infra_adsp_26m",
+		"axi_sel", 12),
+	GATE_INFRA3(INFRACFG_AO_FADSP_32K_CG, "infra_adsp_32k",
+		"axi_sel", 13),
+
+	GATE_INFRA3(INFRACFG_AO_CCIF2_AP_CG, "infra_ccif2_ap",
+		"axi_sel", 16),
+	GATE_INFRA3(INFRACFG_AO_CCIF2_MD_CG, "infra_ccif2_md",
+		"axi_sel", 17),
+	GATE_INFRA3(INFRACFG_AO_CCIF3_AP_CG, "infra_ccif3_ap",
+		"axi_sel", 18),
+	GATE_INFRA3(INFRACFG_AO_CCIF3_MD_CG, "infra_ccif3_md",
+		"axi_sel", 19),
+	GATE_INFRA3(INFRACFG_AO_SEJ_F13M_CG, "infra_sej_f13m",
+		"f_f26m_ck", 20),
+	GATE_INFRA3(INFRACFG_AO_AES_BCLK_CG, "infra_aes_bclk",
+		"axi_sel", 21),
+	GATE_INFRA3(INFRACFG_AO_I2C7_CG, "infra_i2c7",
+		"i2c_sel", 22),
+	GATE_INFRA3(INFRACFG_AO_I2C8_CG, "infra_i2c8",
+		"i2c_sel", 23),
+	GATE_INFRA3(INFRACFG_AO_FBIST2FPC_CG, "infra_fbist2fpc",
+		"msdc50_0_sel", 24),
+
+	GATE_INFRA3(INFRACFG_AO_DEVICE_APC_SYNC_CG, "infra_devapc_sync",
+		"axi_sel", 25),
+
+	GATE_INFRA3(INFRACFG_AO_DPMAIF_CK, "infra_dpmaif",
+		"dpmaif_sel", 26),
+	GATE_INFRA3(INFRACFG_AO_FADSP_CG, "infra_fadsp",
+		"adsp_sel", 27),
+	GATE_INFRA3(INFRACFG_AO_CCIF4_AP_CG, "infra_ccif4_ap",
+		"axi_sel", 28),
+	GATE_INFRA3(INFRACFG_AO_CCIF4_MD_CG, "infra_ccif4_md",
+		"axi_sel", 29),
+	GATE_INFRA3(INFRACFG_AO_SPI6_CG, "infra_spi6",
+		"spi_sel", 30),
+	GATE_INFRA3(INFRACFG_AO_SPI7_CG, "infra_spi7",
+		"spi_sel", 31),
+};
+
+static int clk_mt6785_infracfg_ao_probe(struct platform_device *pdev)
+{
+	struct device_node *node = pdev->dev.of_node;
+	struct clk_hw_onecell_data *clk_data;
+	int r;
+
+	clk_data = mtk_alloc_clk_data(INFRACFG_AO_NR_CLK);
+	if (!clk_data)
+		return -ENOMEM;
+
+	mtk_clk_register_gates(&pdev->dev, node, infra_clks,
+			       ARRAY_SIZE(infra_clks), clk_data);
+
+	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+	if (r)
+		dev_err(&pdev->dev,
+			"could not register clock provider: %d\n", r);
+
+	return r;
+}
+
 static DEFINE_SPINLOCK(mt6785_clk_lock);
 
 static int clk_mt6785_topckgen_probe(struct platform_device *pdev)
@@ -2050,6 +2354,10 @@ static int clk_mt6785_probe(struct platform_device *pdev)
 }
 
 static const struct of_device_id of_match_clk_mt6785[] = {
+	{
+		.compatible = "mediatek,infracfg_ao",
+		.data = clk_mt6785_infracfg_ao_probe,
+	},
 	{
 		.compatible = "mediatek,topckgen",
 		.data = clk_mt6785_topckgen_probe,

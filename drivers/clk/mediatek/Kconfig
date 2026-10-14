@@ -218,13 +218,22 @@ config COMMON_CLK_MT6785
 	help
 	  This driver supports MediaTek MT6785 basic clocks.
 
-	  Covers the gate-only clock domains (audio, camsys, imgsys,
-	  mfgcfg, mmsys_config, vdec_gcon, venc_gcon, apu_conn, apu0,
-	  apu1, apu_vcore), apmixed (top PLLs) and topckgen (the main
-	  mux/divider tree).
+	  Covers all fourteen clock domains in the 4.14 driver:
+	  topckgen, infracfg_ao, apmixed, audio, camsys, imgsys, mfgcfg,
+	  mmsys_config, vdec_gcon, venc_gcon, apu_conn, apu0, apu1 and
+	  apu_vcore.
 
-	  mediatek,infracfg_ao is not provided yet, so the SoC will not
-	  run.
+	  The DVFSP/PLL side is only partly covered: apmixed provides the
+	  top PLLs, but mediatek,mt6785-dvfsp itself is not implemented
+	  (6.12 has no dvfsp equivalent, and in the 4.14 tree that node is
+	  consumed by cpufreq, not by a clock driver). Peripheral clocks
+	  that are muxed from the DVFS PLLs will therefore have no
+	  parent.
+
+	  This driver is compile-verified only. It has not been run on
+	  hardware, and two pieces of the 4.14 bringup sequence (the
+	  apmixed PLL power-down and the topckgen cksys reset pattern)
+	  were deliberately left out.
 
 	  The 4.14 bringup-only *_DUMMY gate ops are not ported; those
 	  exist to keep clocks up during early bringup. This driver uses
