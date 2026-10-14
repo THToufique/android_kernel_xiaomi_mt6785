@@ -133,6 +133,14 @@ config PINCTRL_MT2712
 	default ARM64 && ARCH_MEDIATEK
 	select PINCTRL_MTK
 
+config PINCTRL_MT6785
+	tristate "MediaTek MT6785 pin controller"
+	depends on ARCH_MEDIATEK && ARM64
+	default ARCH_MEDIATEK && ARM64
+	select PINCTRL_MEDIATEK
+	help
+	  Support the MT6785 pin controller.
+
 config PINCTRL_MT6765
 	tristate "MediaTek MT6765 pin control"
 	depends on OF
