@@ -41,6 +41,7 @@
 
 #include "clk-gate.h"
 #include "clk-mtk.h"
+#include "clk-pll.h"
 
 #include "clk-mt6785.h"
 
@@ -51,6 +52,178 @@
  * Local gate ops missing from the common clock framework.
  * These mirror the 4.14 behaviour exactly: a "dummy" disable is a no-op.
  */
+#define GATE_APMIXED(_id, _name, _parent, _shift) {	\
+		.id = _id,				\
+		.name = _name,				\
+		.parent_name = _parent,			\
+		.regs = &apmixed_cg_regs,		\
+		.shift = _shift,			\
+		.ops = &mtk_clk_gate_ops_no_setclr_inv,		\
+	}
+static const struct mtk_gate_regs apmixed_cg_regs = {
+	.set_ofs = 0x20,
+	.clr_ofs = 0x20,
+	.sta_ofs = 0x20,
+};
+static const struct mtk_gate apmixed_clks[] __initconst = {
+	GATE_APMIXED(APMIXED_SSUSB26M, "apmixed_ssusb26m", "f_f26m_ck",
+		4),
+	GATE_APMIXED(APMIXED_APPLL26M, "apmixed_appll26m", "f_f26m_ck",
+		5),
+	GATE_APMIXED(APMIXED_MIPIC0_26M, "apmixed_mipic026m", "f_f26m_ck",
+		6),
+	GATE_APMIXED(APMIXED_MDPLLGP26M, "apmixed_mdpll26m", "f_f26m_ck",
+		7),
+	GATE_APMIXED(APMIXED_MMSYS_F26M, "apmixed_mmsys26m", "f_f26m_ck",
+		8),
+	GATE_APMIXED(APMIXED_UFS26M, "apmixed_ufs26m", "f_f26m_ck",
+		9),
+	GATE_APMIXED(APMIXED_MIPIC1_26M, "apmixed_mipic126m", "f_f26m_ck",
+		11),
+	GATE_APMIXED(APMIXED_MEMPLL26M, "apmixed_mempll26m", "f_f26m_ck",
+		13),
+	GATE_APMIXED(APMIXED_CLKSQ_LVPLL_26M, "apmixed_lvpll26m", "f_f26m_ck",
+		14),
+	GATE_APMIXED(APMIXED_MIPID0_26M, "apmixed_mipid026m", "f_f26m_ck",
+		16),
+	GATE_APMIXED(APMIXED_MIPID1_26M, "apmixed_mipid126m", "f_f26m_ck",
+		17),
+};
+/* PLL tuning range, from the 4.14 MT6785 clock driver. */
+#define MT6785_PLL_FMAX		(3800UL * MHZ)
+#define MT6785_PLL_FMIN		(1500UL * MHZ)
+#define MT6785_INTEGER_BITS		8
+
+#define PLL_B(_id, _name, _reg, _pwr_reg, _en_mask, _flags,	\
+			_rst_bar_mask, _pcwbits, _pd_reg, _pd_shift,	\
+			_tuner_reg, _tuner_en_reg, _tuner_en_bit,	\
+			_pcw_reg, _pcw_shift, _div_table) {		\
+		.id = _id,						\
+		.name = _name,						\
+		.reg = _reg,						\
+		.pwr_reg = _pwr_reg,					\
+		.en_mask = _en_mask,					\
+		.flags = _flags,					\
+		.rst_bar_mask = _rst_bar_mask,				\
+		.fmax = MT6785_PLL_FMAX,				\
+		.fmin = MT6785_PLL_FMIN,				\
+		.pcwbits = _pcwbits,					\
+		.pcwibits = MT6785_INTEGER_BITS,			\
+		.pd_reg = _pd_reg,					\
+		.pd_shift = _pd_shift,					\
+		.tuner_reg = _tuner_reg,				\
+		.tuner_en_reg = _tuner_en_reg,				\
+		.tuner_en_bit = _tuner_en_bit,				\
+		.pcw_reg = _pcw_reg,					\
+		.pcw_shift = _pcw_shift,				\
+		.div_table = _div_table,				\
+	}
+#define PLL(_id, _name, _reg, _pwr_reg, _en_mask,			\
+			_flags, _rst_bar_mask,				\
+			_pcwbits,					\
+			_pd_reg, _pd_shift,				\
+			_tuner_reg, _tuner_en_reg, _tuner_en_bit,	\
+			_pcw_reg, _pcw_shift)				\
+		PLL_B(_id, _name, _reg, _pwr_reg, _en_mask,		\
+			_flags,	_rst_bar_mask,				\
+			_pcwbits,					\
+			_pd_reg, _pd_shift,				\
+			_tuner_reg, _tuner_en_reg, _tuner_en_bit,	\
+			_pcw_reg, _pcw_shift, NULL)
+static const struct mtk_pll_data plls[] = {
+	/* FIXME: need to fix flags/div_table/tuner_reg/table */
+	PLL(APMIXED_MAINPLL, "mainpll", 0x0230, 0x023C, BIT(0),
+		(HAVE_RST_BAR | PLL_AO), BIT(24),
+		22,
+		0x0234, 24,
+		0, 0, 0,
+		0x0234, 0),
+
+	PLL(APMIXED_UNIV2PLL, "univ2pll", 0x0240, 0x024C, BIT(0),
+		(HAVE_RST_BAR), BIT(24),
+		22,
+		0x0244, 24,
+		0, 0, 0,
+		0x0244, 0),
+
+	PLL(APMIXED_MFGPLL, "mfgpll", 0x0250, 0x025C, BIT(0),
+		0, 0,
+		22,
+		0x0254, 24,
+		0, 0, 0,
+		0x0254, 0),
+
+	PLL(APMIXED_MSDCPLL, "msdcpll", 0x0260, 0x026C, BIT(0),
+		0, 0,
+		22,
+		0x0264, 24,
+		0, 0, 0,
+		0x0264, 0),
+
+	PLL(APMIXED_TVDPLL, "tvdpll", 0x0270, 0x027C, BIT(0),
+		0, 0,
+		22,
+		0x0274, 24,
+		0, 0, 0,
+		0x0274, 0),
+
+	PLL(APMIXED_APUPLL, "apupll", 0x02EC, 0x02F8, BIT(0),
+		0, 0,
+		22,
+		0x02F0, 24,
+		0, 0, 0,
+		0x02F0, 0),
+
+	PLL(APMIXED_ADSPPLL, "adsppll", 0x02b0, 0x02bC, BIT(0),
+		(HAVE_RST_BAR), BIT(23),
+		22,
+		0x02b4, 24,
+		0, 0, 0,
+		0x02b4, 0),
+
+	PLL(APMIXED_MMPLL, "mmpll", 0x0280, 0x028C, BIT(0),
+		(HAVE_RST_BAR), BIT(23),
+		22,
+		0x0284, 24,
+		0, 0, 0,
+		0x0284, 0),
+
+	PLL(APMIXED_APLL1, "apll1", 0x02C0, 0x02D0, BIT(0),
+		0, 0,
+		32,
+		0x02C0, 1,
+		0, 0x14, 0,
+		0x02C4, 0),
+
+	PLL(APMIXED_APLL2, "apll2", 0x02D4, 0x02E4, BIT(0),
+		0, 0,
+		32,
+		0x02D4, 1,
+		0, 0x14, 1,
+		0x02D8, 0),
+};
+static int clk_mt6785_apmixed_probe(struct platform_device *pdev)
+{
+	struct device_node *node = pdev->dev.of_node;
+	struct clk_hw_onecell_data *clk_data;
+	int r;
+
+	clk_data = mtk_alloc_clk_data(APMIXED_NR_CLK);
+	if (!clk_data)
+		return -ENOMEM;
+
+	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
+	mtk_clk_register_gates(&pdev->dev, node, apmixed_clks,
+			       ARRAY_SIZE(apmixed_clks), clk_data);
+
+	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+	if (r)
+		dev_err(&pdev->dev,
+			"could not register clock provider: %d\n", r);
+
+	return r;
+}
+
 static const struct mtk_gate_regs audio0_cg_regs = {
 	.set_ofs = 0x0,
 	.clr_ofs = 0x0,
@@ -790,6 +963,10 @@ static int clk_mt6785_probe(struct platform_device *pdev)
 }
 
 static const struct of_device_id of_match_clk_mt6785[] = {
+	{
+		.compatible = "mediatek,apmixed",
+		.data = clk_mt6785_apmixed_probe,
+	},
 	{
 		.compatible = "mediatek,audio",
 		.data = clk_mt6785_audio_probe,
