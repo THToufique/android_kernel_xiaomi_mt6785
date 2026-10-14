@@ -220,10 +220,11 @@ config COMMON_CLK_MT6785
 
 	  Covers the gate-only clock domains (audio, camsys, imgsys,
 	  mfgcfg, mmsys_config, vdec_gcon, venc_gcon, apu_conn, apu0,
-	  apu1, apu_vcore) plus apmixed, which provides the top PLLs.
+	  apu1, apu_vcore), apmixed (top PLLs) and topckgen (the main
+	  mux/divider tree).
 
-	  mediatek,topckgen and mediatek,infracfg_ao are not provided
-	  yet, so the SoC will not run.
+	  mediatek,infracfg_ao is not provided yet, so the SoC will not
+	  run.
 
 	  The 4.14 bringup-only *_DUMMY gate ops are not ported; those
 	  exist to keep clocks up during early bringup. This driver uses
