@@ -87,6 +87,14 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8395-kontron-3-5-sbc-i1200.dtb
 dtb-$(CONFIG_ARCH_MEDIATEK) += mt8395-radxa-nio-12l.dtb
 dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
 
+# Xiaomi begonia (Redmi Note 8 Pro, MediaTek mt6785) - ported from 4.14
+dtb-$(CONFIG_ARCH_MEDIATEK) += begonia.dtb
+dtb-$(CONFIG_ARCH_MEDIATEK) += begoniain.dtb
+
+# begonia carries vendor cust includes from arch/arm64/boot/dts/include (as in 4.14).
+# 6.12's DTC_INCLUDE feeds both cpp -I and dtc -i, so extend it here.
+DTC_INCLUDE += $(srctree)/arch/arm64/boot/dts/include
+
 # Device tree overlays support
 DTC_FLAGS_mt7986a-bananapi-bpi-r3 := -@
 DTC_FLAGS_mt7986a-bananapi-bpi-r3-mini := -@
