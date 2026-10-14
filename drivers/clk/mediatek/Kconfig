@@ -218,10 +218,12 @@ config COMMON_CLK_MT6785
 	help
 	  This driver supports MediaTek MT6785 basic clocks.
 
-	  Part 1: only the gate-only domains that do not depend on the
-	  PLL/DVFSP side. Currently that is the audio domain
-	  ("mediatek,audio"). mediatek,apmixed is not provided yet, so the
-	  topckgen muxes have no parent clock and the SoC will not run.
+	  Covers the gate-only clock domains that do not depend on the
+	  PLL/DVFSP side: audio, camsys, imgsys, mfgcfg, mmsys_config,
+	  vdec_gcon, venc_gcon, apu_conn, apu0, apu1 and apu_vcore.
+
+	  mediatek,apmixed is not provided yet, so the topckgen muxes have
+	  no parent clock and the SoC will not run.
 
 	  The 4.14 bringup-only *_DUMMY gate ops are not ported; those
 	  exist to keep clocks up during early bringup. This driver uses
