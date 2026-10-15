@@ -91,6 +91,16 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
 dtb-$(CONFIG_ARCH_MEDIATEK) += begonia.dtb
 dtb-$(CONFIG_ARCH_MEDIATEK) += begoniain.dtb
 
+# begonia is shipped as an overlay in dtbo.img, not as a base dtb: the board's
+# base tree is mt6785.dtb (shipped as dtb.img) and the bootloader applies these
+# 68 fragments on top of it. Fragment targets are emitted as the placeholder
+# 0xffffffff; the real target is resolved at boot by looking each label up in
+# the overlay's __symbols__ node. Without -@, dtc omits __symbols__ entirely,
+# every fragment silently fails to apply, and the board comes up on the generic
+# EVB tree with none of begonia's GPIO/pinctrl/LED/NFC overrides.
+DTC_FLAGS_begonia := -@
+DTC_FLAGS_begoniain := -@
+
 # begonia carries vendor cust includes from arch/arm64/boot/dts/include (as in 4.14).
 # 6.12's DTC_INCLUDE feeds both cpp -I and dtc -i, so extend it here.
 DTC_INCLUDE += $(srctree)/arch/arm64/boot/dts/include
